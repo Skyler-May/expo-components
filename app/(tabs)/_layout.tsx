@@ -1,45 +1,93 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Tabs, useNavigation } from "expo-router";
+import React from "react";
+import { Platform, Pressable } from "react-native";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { HapticTab } from "@/components/HapticTab";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import TabBarBackground from "@/components/ui/TabBarBackground";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import Ionicons from "@expo/vector-icons/build/Ionicons";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { DrawerActions } from "@react-navigation/native";
 
-export default function TabLayout() {
+const Drawer = createDrawerNavigator();
+
+function TabLayout() {
   const colorScheme = useColorScheme();
+  const navigation = useNavigation();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        // headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+            position: "absolute",
           },
           default: {},
         }),
-      }}>
+        headerLeft: () => (
+          <Pressable
+            onPress={() => {
+              // 打开 drawer
+              navigation.dispatch(DrawerActions.openDrawer());
+            }}
+            style={{ paddingLeft: 20 }}
+          >
+            <Ionicons
+              name="menu"
+              size={24}
+              color={Colors[colorScheme ?? "light"].text}
+            />
+          </Pressable>
+        ),
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="house.fill" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Explore",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="paperplane.fill" color={color} />
+          ),
         }}
       />
     </Tabs>
+  );
+}
+
+export default function TabsWithDrawer() {
+  const colorScheme = useColorScheme();
+
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        drawerActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        headerShown: false, // 禁用 drawer 的 header，使用 tabs 的 header
+      }}
+    >
+      <Drawer.Screen
+        name="tabs"
+        options={{
+          drawerLabel: "Main Tabs",
+        }}
+        component={TabLayout}
+      />
+      {/* 可添加更多 Drawer 页面 */}
+    </Drawer.Navigator>
   );
 }
