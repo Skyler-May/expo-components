@@ -77,17 +77,17 @@ export default function TabsWithDrawer() {
     <Drawer.Navigator
       screenOptions={{
         drawerActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false, // 禁用 drawer 的 header，使用 tabs 的 header
+        headerShown: false,
       }}
     >
       <Drawer.Screen
         name="tabs"
-        options={{
-          drawerLabel: "Main Tabs",
-        }}
         component={TabLayout}
+        options={{
+          drawerLabel: () => null,
+          drawerItemStyle: { height: 0 },
+        }}
       />
-      {/* 可添加更多 Drawer 页面 */}
     </Drawer.Navigator>
   );
 }
