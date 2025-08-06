@@ -70,7 +70,7 @@ function TabLayout() {
   );
 }
 
-export default function TabsWithDrawer() {
+export default function DrawerLayout() {
   const colorScheme = useColorScheme();
 
   return (
