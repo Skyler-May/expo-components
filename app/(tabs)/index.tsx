@@ -58,9 +58,9 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
       <Button
-        title="Go To Test"
+        title="Go To Login"
         onPress={() => {
-          router.push("/test");
+          router.push("/login");
         }}
       />
     </ParallaxScrollView>
