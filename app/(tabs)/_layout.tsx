@@ -1,26 +1,23 @@
-import { Tabs, useNavigation } from "expo-router";
-import React from "react";
-import { Button, Platform, Pressable } from "react-native";
+import { router, Tabs } from "expo-router";
+import { Button, Image, Platform, View } from "react-native";
 
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import Ionicons from "@expo/vector-icons/build/Ionicons";
 import type { DrawerContentComponentProps } from "@react-navigation/drawer";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
+  DrawerToggleButton,
 } from "@react-navigation/drawer";
-import { DrawerActions } from "@react-navigation/native";
 
 const Drawer = createDrawerNavigator();
 
-function TabLayout() {
+function TabsLayout() {
   const colorScheme = useColorScheme();
-  const navigation = useNavigation();
 
   return (
     <Tabs
@@ -36,21 +33,7 @@ function TabLayout() {
           },
           default: {},
         }),
-        headerLeft: () => (
-          <Pressable
-            onPress={() => {
-              // 打开 drawer
-              navigation.dispatch(DrawerActions.openDrawer());
-            }}
-            style={{ paddingLeft: 20 }}
-          >
-            <Ionicons
-              name="menu"
-              size={24}
-              color={Colors[colorScheme ?? "light"].text}
-            />
-          </Pressable>
-        ),
+        headerLeft: () => <DrawerToggleButton />,
       }}
     >
       <Tabs.Screen
@@ -79,7 +62,12 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   return (
     <DrawerContentScrollView {...props}>
       {/* 自定义头部 */}
-      <></>
+      <View style={{ padding: 16 }}>
+        <Image
+          source={{ uri: "https://picsum.photos/seed/picsum/100/100" }}
+          style={{ width: 100, height: 100, borderRadius: 50 }}
+        />
+      </View>
       {/* 系统自带的 DrawerItem */}
       <DrawerItem
         label="首页"
@@ -87,7 +75,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
       />
       {/* 你也可以放任意自定义内容 */}
       <></>
-      <Button title={"登出"} onPress={() => {}} />
+      <Button title={"登出"} onPress={() => router.push("/login")} />
     </DrawerContentScrollView>
   );
 }
@@ -103,8 +91,8 @@ export default function DrawerLayout() {
       }}
     >
       <Drawer.Screen
-        name="(tabs)"
-        component={TabLayout}
+        name="TabsLayout"
+        component={TabsLayout}
         options={{
           drawerLabel: () => null,
           drawerItemStyle: { height: 0 },
