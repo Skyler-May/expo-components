@@ -1,4 +1,3 @@
-// lunar-data.ts
 // 农历相关数据
 export const LUNAR_INFO = [
   0x04bd8,
